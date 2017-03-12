@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
-
 import * as d3 from 'd3';
+
+import { City } from './cities/cities.types';
+import { CitiesService } from './cities/cities.service';
 
 @Component({
   selector: 'app-root',
@@ -10,34 +12,14 @@ import * as d3 from 'd3';
 })
 export class AppComponent implements OnInit {
 
+  cities: Observable<City[]>;
+
   title = 'app works!';
 
-  d3JsonObs = Observable.bindCallback(d3.json);
+  constructor(private citiesService: CitiesService) {}
 
   ngOnInit() {
-
-    d3.json('./assets/data/tweets.json', data => {
-      console.log(JSON.stringify(data));
-    });
-
-    /*
-    this.d3JsonObs('').subscribe(data => {
-      console.log('Hello');
-    });
-    */
-
-    this.d3test();
-
-  }
-
-  d3test() {
-
-    const x = d3.scaleLinear()
-              .domain([10, 130])
-              .range([0, 960]);
-
-    console.log(`x for 50: ${x(20)}`);
-
+    this.cities = this.citiesService.getCities();
   }
 
 }
